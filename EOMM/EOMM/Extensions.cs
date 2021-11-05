@@ -12,6 +12,16 @@ namespace EOMM {
       };
     }
 
+    public static int ToInt(this MatchOutcome matchOutcome) {
+      // -1 for loss, 0 for draw, 1 for win
+      return matchOutcome switch {
+        MatchOutcome.Win => 1,
+        MatchOutcome.Loss => -1,
+        MatchOutcome.Draw => 0,
+        _ => throw new ArgumentOutOfRangeException(nameof(matchOutcome), matchOutcome, null)
+      };
+    }
+
     public static IList<T> Fill<T>(this IList<T> list, int amount, Func<T> generator) {
       for (var i = 0; i < amount; i++) {
         list.Add(generator());

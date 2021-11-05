@@ -36,7 +36,9 @@ namespace EOMM {
         .Append(nextOutcome)
         .ToArray();
 
-      var (a, b, c) = ((int) newWinHistory[0], (int) newWinHistory[1], (int) newWinHistory[2]);
+      // Console.WriteLine($"{player.Id}'s win history: {newWinHistory[0]}, {newWinHistory[1]}, {newWinHistory[2]}");
+
+      var (a, b, c) = (newWinHistory[0].ToInt(), newWinHistory[1].ToInt(), newWinHistory[2].ToInt());
 
       var churnRate = (a, b, c) switch {
         (1, 1, 1) => 37,
