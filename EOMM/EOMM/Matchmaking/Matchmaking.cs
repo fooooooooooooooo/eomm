@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using EOMM.Models;
 using JetBrains.Annotations;
 
-namespace EOMM {
+namespace EOMM.Matchmaking {
   public class Matchmaking {
     /// <summary>
     ///   Predict win rate of <c>player 1</c>, against <c>player 2</c>.

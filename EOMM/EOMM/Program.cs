@@ -1,4 +1,7 @@
 ﻿using System;
+using EOMM.Algorithms;
+using EOMM.Models;
+using EOMM.Simulation;
 
 namespace EOMM {
   public static class Program {

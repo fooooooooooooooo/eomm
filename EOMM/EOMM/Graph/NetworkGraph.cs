@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EOMM {
+namespace EOMM.Graph {
   public class NetworkGraph {
     public IList<Node> Nodes { get; } = new List<Node>();
     public IList<Edge> Edges { get; } = new List<Edge>();

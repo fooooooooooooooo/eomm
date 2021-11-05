@@ -1,4 +1,4 @@
-﻿namespace EOMM {
+﻿namespace EOMM.Graph {
   public class Edge {
     public Edge(Node from, Node to, double weight, double retainWeight) {
       From = from;

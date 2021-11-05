@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EOMM {
+namespace EOMM.Models {
   public class Player {
     public Player(Guid id) {
       var r = new Random();

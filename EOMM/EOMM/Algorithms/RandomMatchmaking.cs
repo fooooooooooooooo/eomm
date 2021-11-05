@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EOMM.Matchmaking;
+using EOMM.Models;
 
-namespace EOMM {
+namespace EOMM.Algorithms {
   public class RandomMatchmaking : Matchmaker {
     public override List<List<Player>> Run(IList<Player> players) {
       var pairCount = players.Count / 2;

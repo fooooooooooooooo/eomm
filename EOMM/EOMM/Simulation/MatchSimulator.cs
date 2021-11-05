@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EOMM.Matchmaking;
+using EOMM.Models;
 
-namespace EOMM {
+namespace EOMM.Simulation {
   public class MatchSimulator {
     private readonly int _playerCount;
     private readonly PlayerGraph _playerGraph;

@@ -1,4 +1,4 @@
-﻿namespace EOMM {
+﻿namespace EOMM.Models {
   public enum MatchOutcome {
     Win = 1,
     Loss = 0,

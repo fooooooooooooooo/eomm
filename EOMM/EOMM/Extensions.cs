@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EOMM.Models;
 
 namespace EOMM {
   public static class Extensions {

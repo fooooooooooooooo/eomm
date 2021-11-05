@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EOMM.Graph;
 
-namespace EOMM {
+namespace EOMM.Models {
   public class PlayerGraph {
     private readonly NetworkGraph _graph;
 
@@ -32,7 +33,7 @@ namespace EOMM {
         for (var j = i + 1; j < players.Count; j++) {
           var second = players[j];
 
-          var churnRate = Matchmaking.PredictPairChurn(first, second);
+          var churnRate = Matchmaking.Matchmaking.PredictPairChurn(first, second);
 
           _graph.AddEdge(first.Id, second.Id, churnRate, 200 - churnRate);
         }
