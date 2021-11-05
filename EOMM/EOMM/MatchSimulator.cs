@@ -15,8 +15,8 @@ namespace EOMM {
       _playerGraph.LoadPlayers(_players);
     }
 
-    public int Run(Matchmaker matchmaker) {
-      var retainedPlayers = 0;
+    public double Run(Matchmaker matchmaker) {
+      var retainedPlayers = 0f;
 
       var result = matchmaker.Run(_players);
       var retain = _playerGraph.GetRetainWeights();
@@ -26,16 +26,16 @@ namespace EOMM {
         if (edge is null) {
           Console.WriteLine("first try: cant find edge");
           pair.Reverse();
+
+          edge = retain.FirstOrDefault(x => x.From.PlayerId == pair[0].Id || x.To.PlayerId == pair[1].Id);
+
+          if (edge is null) {
+            Console.WriteLine("second try: cant find edge");
+            continue;
+          }
         }
 
-        var newEdge = retain.FirstOrDefault(x => x.From.PlayerId == pair[0].Id || x.To.PlayerId == pair[1].Id);
-
-        if (newEdge is null) {
-          Console.WriteLine("second try: cant find edge");
-          continue;
-        }
-
-        retainedPlayers += (int) (newEdge!.RetainWeight / 100f);
+        retainedPlayers += (float) edge.RetainWeight / 100f;
       }
 
       return retainedPlayers;
