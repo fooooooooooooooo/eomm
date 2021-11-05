@@ -20,7 +20,7 @@ namespace EOMM.Simulation {
     public double Run(Matchmaker matchmaker) {
       var retainedPlayers = 0f;
 
-      var result = matchmaker.Run(_players);
+      var result = matchmaker.Run(_players, _playerGraph);
       var retain = _playerGraph.GetRetainWeights();
       foreach (var pair in result) {
         var edge = retain.FirstOrDefault(x => x.From.PlayerId == pair[1].Id || x.To.PlayerId == pair[0].Id);

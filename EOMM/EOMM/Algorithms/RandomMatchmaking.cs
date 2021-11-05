@@ -6,7 +6,13 @@ using EOMM.Models;
 
 namespace EOMM.Algorithms {
   public class RandomMatchmaking : Matchmaker {
-    public override List<List<Player>> Run(IList<Player> players) {
+    public override string Name => "Random Matchmaking";
+
+    public override List<List<Player>> Run(IList<Player>? players = null, PlayerGraph? playerGraph = null) {
+      if (players is null) {
+        throw new ArgumentException($"argument {nameof(players)} cannot be null for {nameof(RandomMatchmaking)}");
+      }
+
       var pairCount = players.Count / 2;
 
       List<List<Player>> pairs = new();
