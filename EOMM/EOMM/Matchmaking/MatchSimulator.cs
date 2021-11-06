@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using EOMM.Models;
 using EOMM.QuickGraph;
-using QuikGraph.Graphviz;
 using static EOMM.Matchmaking.Matchmaking;
 
 namespace EOMM.Matchmaking {
@@ -11,9 +9,9 @@ namespace EOMM.Matchmaking {
     private readonly PlayerGraph _playerGraph;
     private readonly List<PlayerVertex> _players;
 
-    public MatchSimulator(int playerCount, PlayerGraph playerGraph) {
+    public MatchSimulator(List<PlayerVertex> players, PlayerGraph playerGraph) {
       _playerGraph = playerGraph;
-      _players = new List<PlayerVertex>().Fill(playerCount, () => new PlayerVertex());
+      _players = players;
       _playerGraph.AddPlayers(_players);
       _playerGraph.GenerateEdges();
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EOMM.Algorithms;
 using EOMM.Matchmaking;
+using EOMM.Models;
 using EOMM.QuickGraph;
 
 namespace EOMM {
@@ -19,13 +20,13 @@ namespace EOMM {
       var header = $"{"Time",-10}  {"Name",-32}  {"Iteration",-9}  {"Retained",-8} ";
       Console.WriteLine(header);
 
-      // TODO : generate players in one place, then reuse them for all algorithms
+      var players = new List<PlayerVertex>().Fill(playerCount, () => new PlayerVertex());
 
-      var randomParallelTask = RunMatchmaker(new RandomMatchmaking(), playerCount, iterations);
-      var skillBasedParallelTask = RunMatchmaker(new SkillBasedMatchmaking(), playerCount, iterations);
-      var worstParallelTask = RunMatchmaker(new WorstMatchmaking(), playerCount, iterations);
+      var randomParallelTask = RunMatchmaker(new RandomMatchmaking(), players, iterations);
+      var skillBasedParallelTask = RunMatchmaker(new SkillBasedMatchmaking(), players, iterations);
+      var worstParallelTask = RunMatchmaker(new WorstMatchmaking(), players, iterations);
       var engagementOptimizedParallelTask =
-        RunMatchmaker(new EngagementOptimizedMatchmaking(), playerCount, iterations);
+        RunMatchmaker(new EngagementOptimizedMatchmaking(), players, iterations);
 
       var results = await Task.WhenAll(
         randomParallelTask,
@@ -52,9 +53,10 @@ namespace EOMM {
       Console.WriteLine(AverageResults(engagementOptimizedResults));
     }
 
-    private static async Task<List<Result>> RunMatchmaker(IMatchmaker matchmaker, int playerCount, int iterations) {
+    private static async Task<List<Result>> RunMatchmaker(IMatchmaker matchmaker, List<PlayerVertex> players, int
+      iterations) {
       var matchmakerTasks = Enumerable.Range(0, iterations)
-        .Select(i => new Func<Task<Result>>(() => Simulate(playerCount, i, matchmaker)));
+        .Select(i => new Func<Task<Result>>(() => Simulate(players, i, matchmaker)));
 
       var results = new List<Result>();
 
@@ -108,14 +110,14 @@ namespace EOMM {
       return result;
     }
 
-    private static async Task<Result> Simulate(int playerCount, int iteration, IMatchmaker matchmaker) {
+    private static async Task<Result> Simulate(List<PlayerVertex> players, int iteration, IMatchmaker matchmaker) {
       var timer = new Stopwatch();
       timer.Start();
 
       var retainedPlayers = await Task.Run(() => {
         var graph = new PlayerGraph();
 
-        return new MatchSimulator(playerCount, graph).Run(matchmaker);
+        return new MatchSimulator(players, graph).Run(matchmaker);
       });
 
       timer.Stop();
