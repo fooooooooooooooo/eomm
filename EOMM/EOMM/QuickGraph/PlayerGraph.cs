@@ -32,7 +32,7 @@ namespace EOMM.QuickGraph {
     public static IEnumerable<PlayerEdge> MaxMatching<TKey>(PlayerGraph graph, Func<PlayerEdge, TKey> matchFunc) {
       var edgeList = graph.Edges.ToList();
 
-      var ordered = edgeList.OrderBy(matchFunc);
+      var ordered = edgeList.OrderByDescending(matchFunc);
       var matchedVertices = new List<PlayerVertex>();
 
       var output = new List<PlayerEdge>();

@@ -12,8 +12,8 @@ using EOMM.QuickGraph;
 namespace EOMM {
   public static class Simulation {
     public static async Task RunAsync() {
-      const int playerCount = 500;
-      const int iterations = 100;
+      const int playerCount = 100;
+      const int iterations = 10000;
 
       Console.WriteLine("Simulating with " + playerCount + " players\n");
 
@@ -112,15 +112,15 @@ namespace EOMM {
 
     private static async Task<Result> Simulate(List<PlayerVertex> players, int iteration, IMatchmaker matchmaker) {
       var timer = new Stopwatch();
-      timer.Start();
 
       var retainedPlayers = await Task.Run(() => {
         var graph = new PlayerGraph();
-
-        return new MatchSimulator(players, graph).Run(matchmaker);
+        timer.Start();
+        var res = new MatchSimulator(players, graph).Run(matchmaker);
+        timer.Stop();
+        return res;
       });
 
-      timer.Stop();
 
       return new Result(matchmaker.Name, iteration, retainedPlayers, timer.Elapsed);
     }
