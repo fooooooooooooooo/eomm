@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
 using EOMM.Models;
 using JetBrains.Annotations;
 
 namespace EOMM.Matchmaking {
-  public class Matchmaking {
+  [PublicAPI]
+  public static class Matchmaking {
     /// <summary>
     ///   Predict win rate of <c>player 1</c>, against <c>player 2</c>.
     ///   Here we adopt the ELO algorithm for ease of computation.
@@ -31,15 +31,7 @@ namespace EOMM.Matchmaking {
     /// <returns>churn rate(*100%) of player with the given predicted outcome</returns>
     [PublicAPI]
     public static double PredictPlayerChurn(Player player, MatchOutcome nextOutcome) {
-      var newWinHistory = player.WinHistory
-        .ToList()
-        .TakeLast(player.WinHistory.Length - 1)
-        .Append(nextOutcome)
-        .ToArray();
-
-      // Console.WriteLine($"{player.Id}'s win history: {newWinHistory[0]}, {newWinHistory[1]}, {newWinHistory[2]}");
-
-      var (a, b, c) = (newWinHistory[0].ToInt(), newWinHistory[1].ToInt(), newWinHistory[2].ToInt());
+      var (a, b, c) = (player.WinHistory[1].ToInt(), player.WinHistory[2].ToInt(), nextOutcome.ToInt());
 
       var churnRate = (a, b, c) switch {
         (1, 1, 1) => 37,
@@ -67,14 +59,14 @@ namespace EOMM.Matchmaking {
       var (firstWin, firstDraw, firstLoss) = PredictOutcome(first, second);
 
       var p1Win = firstWin *
-                  (PredictPlayerChurn(first, MatchOutcome.Win) + PredictPlayerChurn(second, MatchOutcome.Loss));
+                  (PredictPlayerChurn(first, MatchOutcome.Win) +
+                   PredictPlayerChurn(second, MatchOutcome.Loss));
 
-      const int draw = 0;
+      var p2Win = firstLoss *
+                  (PredictPlayerChurn(first, MatchOutcome.Loss) +
+                   PredictPlayerChurn(second, MatchOutcome.Win));
 
-      var p2Win = firstLoss * (PredictPlayerChurn(first, MatchOutcome.Loss) + PredictPlayerChurn
-        (second, MatchOutcome.Win));
-
-      var pairChurn = p1Win + draw + p2Win;
+      var pairChurn = p1Win + firstDraw + p2Win;
 
       return pairChurn;
     }

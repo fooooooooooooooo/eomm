@@ -8,7 +8,7 @@ namespace EOMM.Algorithms {
   public class RandomMatchmaking : Matchmaker {
     public override string Name => "Random Matchmaking";
 
-    public override List<List<Player>> Run(IList<Player>? players = null, PlayerGraph? playerGraph = null) {
+    public override List<List<Player>> Run(List<Player>? players = null, PlayerGraph? playerGraph = null) {
       if (players is null) {
         throw new ArgumentException($"argument {nameof(players)} cannot be null for {nameof(RandomMatchmaking)}");
       }

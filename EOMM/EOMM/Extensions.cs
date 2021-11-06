@@ -23,7 +23,7 @@ namespace EOMM {
       };
     }
 
-    public static IList<T> Fill<T>(this IList<T> list, int amount, Func<T> generator) {
+    public static List<T> Fill<T>(this List<T> list, int amount, Func<T> generator) {
       for (var i = 0; i < amount; i++) {
         list.Add(generator());
       }
@@ -31,7 +31,7 @@ namespace EOMM {
       return list;
     }
 
-    public static T Pop<T>(this IList<T> list) {
+    public static T Pop<T>(this List<T> list) {
       var item = list[^1];
       list.RemoveAt(list.Count - 1);
       return item;

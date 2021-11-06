@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using EOMM.Matchmaking;
 using EOMM.Models;
 
 namespace EOMM.Simulation {
   public class MatchSimulator {
-    private readonly int _playerCount;
     private readonly PlayerGraph _playerGraph;
-    private readonly IList<Player> _players;
+    private readonly List<Player> _players;
 
     public MatchSimulator(int playerCount, PlayerGraph playerGraph) {
-      _playerCount = playerCount;
       _playerGraph = playerGraph;
       _players = new List<Player>().Fill(playerCount, () => new Player());
       _playerGraph.LoadPlayers(_players);
@@ -20,24 +16,18 @@ namespace EOMM.Simulation {
     public double Run(Matchmaker matchmaker) {
       var retainedPlayers = 0f;
 
-      var result = matchmaker.Run(_players, _playerGraph);
+      var pairs = matchmaker.Run(_players, _playerGraph);
+
       var retain = _playerGraph.GetRetainWeights();
-      foreach (var pair in result) {
-        var edge = retain.FirstOrDefault(x => x.From.PlayerId == pair[1].Id || x.To.PlayerId == pair[0].Id);
 
-        if (edge is null) {
-          Console.WriteLine("first try: cant find edge");
-          pair.Reverse();
+      foreach (var pair in pairs) {
+        var (first, second) = (pair[0], pair[1]);
 
-          edge = retain.FirstOrDefault(x => x.From.PlayerId == pair[0].Id || x.To.PlayerId == pair[1].Id);
-
-          if (edge is null) {
-            Console.WriteLine("second try: cant find edge");
-            continue;
-          }
+        if (!retain.ContainsKey((first.Id, second.Id))) {
+          (first, second) = (pair[1], pair[0]);
         }
 
-        retainedPlayers += (float) edge.RetainWeight / 100f;
+        retainedPlayers += (float) retain[(first.Id, second.Id)] / 100f;
       }
 
       return retainedPlayers;

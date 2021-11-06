@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EOMM.Models {
   public class Player {
@@ -40,8 +42,12 @@ namespace EOMM.Models {
     public int Mmr { get; set; }
     public MatchOutcome[] WinHistory { get; }
 
-    public Player GeneratePlayer() {
+    public static Player GeneratePlayer() {
       return new Player();
+    }
+
+    public static Player? FindById(IEnumerable<Player> players, Guid id) {
+      return players.FirstOrDefault(p => p.Id == id);
     }
   }
 }

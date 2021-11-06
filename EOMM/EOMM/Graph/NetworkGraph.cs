@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace EOMM.Graph {
   public class NetworkGraph {
-    public IList<Node> Nodes { get; } = new List<Node>();
-    public IList<Edge> Edges { get; } = new List<Edge>();
+    public List<Node> Nodes { get; } = new();
+    public List<Edge> Edges { get; } = new();
 
     public Node AddNode(Guid playerId) {
       var node = new Node(playerId);
