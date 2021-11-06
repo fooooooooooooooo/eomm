@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using EOMM.Graph;
 using EOMM.Models;
+using EOMM.QuickGraph;
 
 namespace EOMM.Matchmaking {
   public abstract class Matchmaker {
     public abstract string Name { get; }
-    public abstract List<List<Player>> Run(List<Player>? players = null, PlayerGraph? playerGraph = null);
+    public abstract IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null);
   }
 }

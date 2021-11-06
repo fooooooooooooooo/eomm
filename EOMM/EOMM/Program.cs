@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using EOMM.Algorithms;
 using EOMM.Matchmaking;
-using EOMM.Models;
+using EOMM.QuickGraph;
 using EOMM.Simulation;
 
 namespace EOMM {
@@ -22,7 +22,7 @@ namespace EOMM {
         worstResults.Add(ProcessResult(Simulate(() => new WorstMatchmaking()), i));
       }
 
-      Console.WriteLine("\n");
+      Console.WriteLine("\n-- Averages --\n");
 
       var resultsHeader = $"{"Name",-30}  {"Time",-10}  {"Retained",-8} ";
       Console.WriteLine(resultsHeader);

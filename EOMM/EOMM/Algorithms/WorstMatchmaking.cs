@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using EOMM.Matchmaking;
 using EOMM.Models;
+using EOMM.QuickGraph;
+using static EOMM.QuickGraph.PlayerGraph;
 
 namespace EOMM.Algorithms {
   public class WorstMatchmaking : Matchmaker {
     public override string Name => "Worst Matchmaking";
 
-    public override List<List<Player>> Run(List<Player>? players = null, PlayerGraph? playerGraph = null) {
+    public override IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null) {
       if (players is null) {
         throw new ArgumentException($"argument {nameof(players)} cannot be null for {nameof(SkillBasedMatchmaking)}");
       }
@@ -18,9 +20,7 @@ namespace EOMM.Algorithms {
           $"argument {nameof(playerGraph)} cannot be null for {nameof(SkillBasedMatchmaking)}");
       }
 
-      var nodeMatches = playerGraph.MaxWeightMatching(players);
-
-      var matches = PlayerGraph.NodePairsToPlayerPairs(nodeMatches, players);
+      var matches = MaxMatching(playerGraph, (edge => edge.ChurnWeight));
 
       return matches.ToList();
     }

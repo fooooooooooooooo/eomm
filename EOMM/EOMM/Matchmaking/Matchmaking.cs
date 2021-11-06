@@ -1,5 +1,6 @@
 ﻿using System;
 using EOMM.Models;
+using EOMM.QuickGraph;
 using JetBrains.Annotations;
 
 namespace EOMM.Matchmaking {
@@ -13,7 +14,7 @@ namespace EOMM.Matchmaking {
     /// <param name="second">Player 2</param>
     /// <returns>Player 1 win chance, Player 1 draw chance, Player 1 loss chance</returns>
     [PublicAPI]
-    public static (double, double, double) PredictOutcome(Player first, Player second) {
+    public static (double, double, double) PredictOutcome(PlayerVertex first, PlayerVertex second) {
       var firstWin = 1 / (1 + Math.Pow(10, ((double) second.Mmr - first.Mmr) / 400));
       const int firstDraw = 0;
       var firstLoss = 1 - firstWin - firstDraw;
@@ -30,7 +31,7 @@ namespace EOMM.Matchmaking {
     /// <param name="nextOutcome">Predicted match outcome</param>
     /// <returns>churn rate(*100%) of player with the given predicted outcome</returns>
     [PublicAPI]
-    public static double PredictPlayerChurn(Player player, MatchOutcome nextOutcome) {
+    public static double PredictPlayerChurn(PlayerVertex player, MatchOutcome nextOutcome) {
       var (a, b, c) = (player.WinHistory[1].ToInt(), player.WinHistory[2].ToInt(), nextOutcome.ToInt());
 
       var churnRate = (a, b, c) switch {
@@ -55,7 +56,7 @@ namespace EOMM.Matchmaking {
     /// <param name="second">Player 2</param>
     /// <returns>Pairwise churn weight</returns>
     [PublicAPI]
-    public static double PredictPairChurn(Player first, Player second) {
+    public static double PredictPairChurn(PlayerVertex first, PlayerVertex second) {
       var (firstWin, firstDraw, firstLoss) = PredictOutcome(first, second);
 
       var p1Win = firstWin *
@@ -69,6 +70,10 @@ namespace EOMM.Matchmaking {
       var pairChurn = p1Win + firstDraw + p2Win;
 
       return pairChurn;
+    }
+
+    public static double GetRetainWeight(double churnRate) {
+      return 200 - churnRate;
     }
   }
 }
