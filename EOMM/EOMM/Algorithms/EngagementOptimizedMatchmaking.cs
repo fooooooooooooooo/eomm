@@ -7,8 +7,8 @@ using EOMM.QuickGraph;
 using static EOMM.QuickGraph.PlayerGraph;
 
 namespace EOMM.Algorithms {
-  public class WorstMatchmaking : Matchmaker {
-    public override string Name => "Worst Matchmaking";
+  public class EngagementOptimizedMatchmaking : Matchmaker {
+    public override string Name => "Engagement Optimized Matchmaking";
 
     public override IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null) {
       if (players is null) {
@@ -20,7 +20,7 @@ namespace EOMM.Algorithms {
           $"argument {nameof(playerGraph)} cannot be null for {nameof(SkillBasedMatchmaking)}");
       }
 
-      var matches = MaxMatching(playerGraph, (edge => edge.ChurnWeight));
+      var matches = MaxMatching(playerGraph, (edge => edge.RetainWeight));
 
       return matches;
     }

@@ -13,22 +13,36 @@ namespace EOMM {
       List<Result> randomResults = new();
       List<Result> skillBasedResults = new();
       List<Result> worstResults = new();
+      List<Result> engagementOptimizedResults = new();
 
-      var header = $"{"Time",-10}  {"Name",-30}  {"Iteration",-9}  {"Retained",-8} ";
+      const int playerCount = 100;
+
+      Console.WriteLine("Simulating with " + playerCount + " players\n");
+
+      var header = $"{"Time",-10}  {"Name",-32}  {"Iteration",-9}  {"Retained",-8} ";
       Console.WriteLine(header);
+
+      // TODO : generate players in one place, then reuse them for all algorithms
+
       for (var i = 0; i < 3; i++) {
-        randomResults.Add(ProcessResult(Simulate(() => new RandomMatchmaking()), i));
-        skillBasedResults.Add(ProcessResult(Simulate(() => new SkillBasedMatchmaking()), i));
-        worstResults.Add(ProcessResult(Simulate(() => new WorstMatchmaking()), i));
+        randomResults.Add(ProcessResult(Simulate(playerCount, () => new RandomMatchmaking()), i));
+        skillBasedResults.Add(ProcessResult(Simulate(playerCount, () => new SkillBasedMatchmaking()), i));
+        worstResults.Add(ProcessResult(Simulate(playerCount, () => new WorstMatchmaking()), i));
+        engagementOptimizedResults.Add(ProcessResult(Simulate(playerCount, () => new EngagementOptimizedMatchmaking()),
+          i));
       }
 
       Console.WriteLine("\n-- Averages --\n");
 
-      var resultsHeader = $"{"Name",-30}  {"Time",-10}  {"Retained",-8} ";
+      Console.WriteLine(playerCount + " players\n");
+
+      var resultsHeader = $"{"Name",-32}  {"Time",-10}  {"Retained",-8} ";
       Console.WriteLine(resultsHeader);
+
       Console.WriteLine(AverageResults(randomResults));
       Console.WriteLine(AverageResults(skillBasedResults));
       Console.WriteLine(AverageResults(worstResults));
+      Console.WriteLine(AverageResults(engagementOptimizedResults));
     }
 
 
@@ -41,7 +55,7 @@ namespace EOMM {
 
       var retained = $"{averageRetained:0.0000}";
 
-      var values = $"{name,-30}  {time,-10}  {retained,-8} ";
+      var values = $"{name,-32}  {time,-10}  {retained,-8} ";
 
       return values;
     }
@@ -51,19 +65,19 @@ namespace EOMM {
       var retainedPlayers = $"{result.Retained:0.0000}";
       var ms = $"{result.Time.TotalMilliseconds:0.00} ms";
 
-      var message = $"{ms,-10}  {name,-30}  {i + 1,-9}  {retainedPlayers,-8} ";
+      var message = $"{ms,-10}  {name,-32}  {i + 1,-9}  {retainedPlayers,-8} ";
 
       Console.WriteLine(message);
 
       return result;
     }
 
-    private static Result Simulate(Func<Matchmaker> matchmaker) {
+    private static Result Simulate(int playerCount, Func<Matchmaker> matchmaker) {
       var timer = new Stopwatch();
       timer.Start();
       var graph = new PlayerGraph();
 
-      var retainedPlayers = new MatchSimulator(100, graph).Run(matchmaker());
+      var retainedPlayers = new MatchSimulator(playerCount, graph).Run(matchmaker());
 
       timer.Stop();
 
