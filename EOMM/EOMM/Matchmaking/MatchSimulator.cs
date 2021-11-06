@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using EOMM.Matchmaking;
 using EOMM.Models;
 using EOMM.QuickGraph;
 using QuikGraph.Graphviz;
 using static EOMM.Matchmaking.Matchmaking;
 
-namespace EOMM.Simulation {
+namespace EOMM.Matchmaking {
   public class MatchSimulator {
     private readonly PlayerGraph _playerGraph;
     private readonly List<PlayerVertex> _players;
@@ -17,13 +16,9 @@ namespace EOMM.Simulation {
       _players = new List<PlayerVertex>().Fill(playerCount, () => new PlayerVertex());
       _playerGraph.AddPlayers(_players);
       _playerGraph.GenerateEdges();
-
-      var viz = _playerGraph.ToGraphviz();
-
-      File.WriteAllText("viz.txt", viz);
     }
 
-    public double Run(Matchmaker matchmaker) {
+    public double Run(IMatchmaker matchmaker) {
       var pairs = matchmaker.Run(_players, _playerGraph);
 
       return (from pair in pairs

@@ -8,7 +8,7 @@ using static EOMM.Matchmaking.Matchmaking;
 namespace EOMM.QuickGraph {
   public class PlayerGraph : AdjacencyGraph<PlayerVertex, PlayerEdge> {
     public void AddPlayers(IEnumerable<PlayerVertex> players) {
-      var count = AddVertexRange(players);
+      AddVertexRange(players);
     }
 
     public void GenerateEdges() {

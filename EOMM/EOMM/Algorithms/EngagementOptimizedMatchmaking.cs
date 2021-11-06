@@ -7,10 +7,10 @@ using EOMM.QuickGraph;
 using static EOMM.QuickGraph.PlayerGraph;
 
 namespace EOMM.Algorithms {
-  public class EngagementOptimizedMatchmaking : Matchmaker {
-    public override string Name => "Engagement Optimized Matchmaking";
+  public class EngagementOptimizedMatchmaking : IMatchmaker {
+    public string Name => "Engagement Optimized Matchmaking";
 
-    public override IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null) {
+    public IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null) {
       if (players is null) {
         throw new ArgumentException($"argument {nameof(players)} cannot be null for {nameof(SkillBasedMatchmaking)}");
       }

@@ -3,8 +3,8 @@ using EOMM.Models;
 using EOMM.QuickGraph;
 
 namespace EOMM.Matchmaking {
-  public abstract class Matchmaker {
-    public abstract string Name { get; }
-    public abstract IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null);
+  public interface IMatchmaker {
+    public string Name { get; }
+    public IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null);
   }
 }

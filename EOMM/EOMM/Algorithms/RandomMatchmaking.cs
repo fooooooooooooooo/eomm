@@ -6,10 +6,10 @@ using EOMM.Models;
 using EOMM.QuickGraph;
 
 namespace EOMM.Algorithms {
-  public class RandomMatchmaking : Matchmaker {
-    public override string Name => "Random Matchmaking";
+  public class RandomMatchmaking : IMatchmaker {
+    public string Name => "Random Matchmaking";
 
-    public override IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null) {
+    public IEnumerable<PlayerEdge> Run(List<PlayerVertex>? players = null, PlayerGraph? playerGraph = null) {
       if (players is null) {
         throw new ArgumentException($"argument {nameof(players)} cannot be null for {nameof(RandomMatchmaking)}");
       }
